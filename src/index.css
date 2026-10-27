@@ -1,0 +1,270 @@
+@import "tailwindcss";
+
+@custom-variant dark (&:where([data-theme="dark"], [data-theme="dark"] *));
+
+/* Theme tokens. Components only use these through the Tailwind colors below,
+   so both themes stay in sync. */
+:root {
+  --bg: #f4f3ee;
+  --bg-2: #eae9e2;
+  --surface: #ffffff;
+  --surface-2: #f0efe8;
+  --ink: #0e1014;
+  --muted: #585e6b;
+  --line: rgb(14 16 20 / 0.1);
+  --accent: #c6f24e;
+  --on-accent: #0e1014;
+  --accent-ink: #4b7a06;
+  --glow: rgb(198 242 78 / 0.55);
+  --violet: #8b7bff;
+  --shadow: 0 30px 80px -30px rgb(14 16 20 / 0.28);
+  color-scheme: light;
+}
+[data-theme="dark"] {
+  --bg: #0a0b0e;
+  --bg-2: #0f1115;
+  --surface: #13151b;
+  --surface-2: #1b1e26;
+  --ink: #f1f2f4;
+  --muted: #949baa;
+  --line: rgb(255 255 255 / 0.09);
+  --accent: #c6f24e;
+  --on-accent: #0a0b0e;
+  --accent-ink: #c6f24e;
+  --glow: rgb(198 242 78 / 0.35);
+  --violet: #7b6bff;
+  --shadow: 0 30px 80px -30px rgb(0 0 0 / 0.7);
+  color-scheme: dark;
+}
+
+@theme inline {
+  --color-bg: var(--bg);
+  --color-bg-2: var(--bg-2);
+  --color-surface: var(--surface);
+  --color-surface-2: var(--surface-2);
+  --color-ink: var(--ink);
+  --color-muted: var(--muted);
+  --color-line: var(--line);
+  --color-accent: var(--accent);
+  --color-on-accent: var(--on-accent);
+  --color-accent-ink: var(--accent-ink);
+  --color-violet: var(--violet);
+  --shadow-soft: var(--shadow);
+
+  --font-display: "Bricolage Grotesque Variable", "Inter Variable", system-ui,
+    sans-serif;
+  --font-sans: "Inter Variable", system-ui, -apple-system, "Segoe UI", Roboto,
+    sans-serif;
+  --font-serif: "Instrument Serif", Georgia, serif;
+  --font-hindi: "Mukta", "Nirmala UI", "Noto Sans Devanagari", sans-serif;
+
+  --ease-out-expo: cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+@layer base {
+  html {
+    -webkit-text-size-adjust: 100%;
+    overflow-x: clip;
+  }
+  body {
+    background: var(--bg);
+    color: var(--ink);
+    font-family: var(--font-sans);
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    overflow-x: clip;
+  }
+  ::selection {
+    background: var(--accent);
+    color: var(--on-accent);
+  }
+  :focus-visible {
+    outline: 2px solid var(--accent);
+    outline-offset: 3px;
+    border-radius: 6px;
+  }
+  /* Accent text on light backgrounds needs the darker ink for contrast. */
+  [data-theme="light"] :focus-visible {
+    outline-color: var(--accent-ink);
+  }
+  @media (prefers-reduced-motion: no-preference) {
+    html:not(.lenis) {
+      scroll-behavior: smooth;
+    }
+  }
+  img {
+    user-select: none;
+    -webkit-user-drag: none;
+  }
+}
+
+/* Film grain over the whole page for a printed, less flat feel. */
+.grain {
+  position: fixed;
+  inset: 0;
+  z-index: 70;
+  pointer-events: none;
+  opacity: 0.045;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+}
+[data-theme="light"] .grain {
+  opacity: 0.06;
+}
+
+/* Hero background: fading grid plus slow-moving colour blobs. */
+.bg-grid {
+  background-image:
+    linear-gradient(to right, var(--line) 1px, transparent 1px),
+    linear-gradient(to bottom, var(--line) 1px, transparent 1px);
+  background-size: 64px 64px;
+  mask-image: radial-gradient(ellipse 70% 60% at 50% 35%, #000 30%, transparent 75%);
+}
+.blob {
+  position: absolute;
+  border-radius: 9999px;
+  filter: blur(90px);
+  will-change: transform;
+}
+@media (prefers-reduced-motion: no-preference) {
+  .blob-a {
+    animation: drift-a 18s ease-in-out infinite alternate;
+  }
+  .blob-b {
+    animation: drift-b 22s ease-in-out infinite alternate;
+  }
+}
+@keyframes drift-a {
+  to {
+    transform: translate3d(12vw, 8vh, 0) scale(1.15);
+  }
+}
+@keyframes drift-b {
+  to {
+    transform: translate3d(-10vw, -6vh, 0) scale(0.9);
+  }
+}
+
+/* Timed progress bar used by the hero slider tabs. */
+.tab-progress {
+  transform-origin: left;
+  animation: tab-fill var(--tab-duration, 5s) linear forwards;
+}
+.is-paused .tab-progress {
+  animation-play-state: paused;
+}
+@keyframes tab-fill {
+  from {
+    transform: scaleX(0);
+  }
+  to {
+    transform: scaleX(1);
+  }
+}
+
+@keyframes pulse-ring {
+  0% {
+    transform: scale(1);
+    opacity: 0.7;
+  }
+  100% {
+    transform: scale(2.6);
+    opacity: 0;
+  }
+}
+.pulse-dot::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  background: inherit;
+  animation: pulse-ring 1.8s ease-out infinite;
+}
+
+@keyframes spin-slow {
+  to {
+    transform: rotate(360deg);
+  }
+}
+.spin-slow {
+  animation: spin-slow 18s linear infinite;
+}
+
+@keyframes typing {
+  0%,
+  60%,
+  100% {
+    transform: translateY(0);
+    opacity: 0.4;
+  }
+  30% {
+    transform: translateY(-3px);
+    opacity: 1;
+  }
+}
+.typing-dot {
+  animation: typing 1.2s infinite;
+}
+.typing-dot:nth-child(2) {
+  animation-delay: 0.15s;
+}
+.typing-dot:nth-child(3) {
+  animation-delay: 0.3s;
+}
+
+@keyframes float-y {
+  50% {
+    transform: translateY(-10px);
+  }
+}
+.float-y {
+  animation: float-y 6s ease-in-out infinite;
+}
+
+@keyframes scroll-cue {
+  0% {
+    transform: translateY(-100%);
+  }
+  100% {
+    transform: translateY(200%);
+  }
+}
+.scroll-cue {
+  animation: scroll-cue 1.8s cubic-bezier(0.65, 0, 0.35, 1) infinite;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .pulse-dot::after,
+  .spin-slow,
+  .typing-dot,
+  .float-y,
+  .scroll-cue {
+    animation: none;
+  }
+  /* No autoplay: the active tab just shows a full bar. */
+  .tab-progress {
+    animation: none;
+    transform: scaleX(1);
+  }
+}
+
+/* Outlined display text, filled on hover. */
+.text-outline {
+  -webkit-text-stroke: 1.5px var(--ink);
+  color: transparent;
+}
+
+/* Theme switch uses a circular reveal via the View Transitions API. */
+::view-transition-old(root),
+::view-transition-new(root) {
+  animation: none;
+  mix-blend-mode: normal;
+}
+
+/* Embla slider viewport. */
+.embla {
+  overflow: hidden;
+}
+.embla__container {
+  display: flex;
+  touch-action: pan-y pinch-zoom;
+}
