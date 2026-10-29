@@ -1,6 +1,8 @@
 import elysoria from "./assets/elysoria.webp";
 import krishinova from "./assets/krishinova.webp";
 import chatty from "./assets/chatty.webp";
+import thesocial from "./assets/thesocial.webp";
+import thesocialApp from "./assets/thesocial-app.webp";
 
 /* Contact details used by every WhatsApp and email link on the site. */
 export const SITE = {
@@ -38,6 +40,31 @@ export const AUDIENCES = [
 ];
 
 export const PROJECTS = [
+  {
+    id: "thesocial",
+    short: "TheSocial",
+    title: "TheSocial community app",
+    kind: "Social platform",
+    description:
+      "A social app for communities, with servers, channels, DMs, voice and video, and real-time messaging. Its Reels feed learns what each person likes, using a machine-learning service to rank them.",
+    tags: [
+      "Real-time messaging",
+      "Servers & channels",
+      "Personalised Reels",
+      "ML recommendations",
+    ],
+    url: "https://thesocialapp.xyz/",
+    cta: "Visit TheSocial",
+    image: thesocialApp,
+    width: 1000,
+    height: 458,
+    alt: "TheSocial’s messages screen with the AI Assistant open, offering to find communities to join",
+    // The hero slider shows the landing page instead of the app screen.
+    heroImage: thesocial,
+    heroAlt:
+      "TheSocial homepage with the headline “Where communities come alive” next to a chat window open on the #general channel",
+    tint: "#14a38b",
+  },
   {
     id: "chatty",
     short: "Chatty",
@@ -157,7 +184,7 @@ export const STEPS = [
 
 export const STATS = [
   { value: 19000, suffix: "+", label: "products in one store I built" },
-  { value: 3, suffix: "", label: "live projects you can try today" },
+  { value: 4, suffix: "", label: "live projects you can try today" },
   { value: 15, suffix: "+", label: "interface bugs fixed in GSSoC 2024" },
   { value: 2, suffix: "", label: "rounds of changes in every project" },
 ];

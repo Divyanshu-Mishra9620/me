@@ -212,10 +212,10 @@ function Showcase({ sx, sy }) {
             {PROJECTS.map((p, i) => (
               <motion.img
                 key={p.id}
-                src={p.image}
+                src={p.heroImage ?? p.image}
                 width={p.width}
                 height={p.height}
-                alt={i === index ? p.alt : ""}
+                alt={i === index ? (p.heroAlt ?? p.alt) : ""}
                 aria-hidden={i !== index}
                 loading={i === 0 ? "eager" : "lazy"}
                 initial={false}
@@ -291,14 +291,14 @@ function Showcase({ sx, sy }) {
             aria-selected={i === index}
             aria-controls="showcase-panel"
             onClick={() => setIndex(i)}
-            className="group w-24 text-left sm:w-40"
+            className="group w-[4.75rem] text-left sm:w-32 md:w-36 lg:w-40"
           >
             <span
               className={`flex items-baseline gap-2 text-xs font-medium transition-colors sm:text-sm ${
                 i === index ? "text-ink" : "text-muted group-hover:text-ink"
               }`}
             >
-              <span className="tabular-nums text-muted">0{i + 1}</span>
+              <span className="hidden tabular-nums text-muted sm:inline">0{i + 1}</span>
               {p.short}
             </span>
             <span className="mt-2.5 block h-[3px] overflow-hidden rounded-full bg-line">
